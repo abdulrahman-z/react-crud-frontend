@@ -11,11 +11,14 @@ export default function ThemeConfig({ children }) {
       primary: {
         main: "#3751FF",
       },
-      ineeColor: {
-        main: "red",
+      error: {
+        main: "#F12B2C",
       },
-      common: {
-        red: "red",
+      success: {
+        main: "#29CC97",
+      },
+      warning: {
+        main: "#FEC400",
       },
     },
   });

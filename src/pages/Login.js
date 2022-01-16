@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import { ReactComponent as LogoIcon } from "../assets/images/logo.svg";
 import { Button, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";
+import PrimaryButton from "../components/PrimaryButton";
 
 const BackgroundWrapper = styled("main")`
   display: flex;
@@ -36,18 +37,6 @@ const StyledTextField = styled(TextField)`
     border-color: #f0f1f7;
     border-radius: 8px;
   }
-`;
-
-const StyledSubmitButton = styled(Button)`
-  border-radius: 8px;
-  padding: 12px 24px;
-  box-shadow: 0px 4px 12px rgba(55, 81, 255, 0.24);
-  font-size: 14px;
-  color: #ffffff;
-  font-weight: 600;
-  line-height: 20px;
-  letter-spacing: 0.2px;
-  text-transform: capitalize;
 `;
 
 const validate = (values) => {
@@ -151,14 +140,7 @@ const Login = () => {
             </Box>
             <Box height={"24px"} />
 
-            <StyledSubmitButton
-              fullWidth
-              variant="contained"
-              type="submit"
-              disabled={!formik.isValid}
-            >
-              Log In
-            </StyledSubmitButton>
+            <PrimaryButton label="Log In" isDisabled={!formik.isValid} />
           </form>
         </Box>
       </LoginCard>

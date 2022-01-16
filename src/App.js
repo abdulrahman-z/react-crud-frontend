@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
+import { ClientContextProvider } from "react-fetching-library";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Client } from "./apiConfig";
 import DashboardContents from "./components/DashboardContents";
 import UsersList from "./components/UsersList";
 import Dashboard from "./pages/Dashboard";
@@ -20,6 +22,7 @@ function App() {
     <ThemeConfig>
       <PageWrapper>
         <BrowserRouter>
+          {/* <ClientContextProvider client={Client}> */}
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/dashboard" element={<Dashboard />} />
@@ -27,6 +30,7 @@ function App() {
             <Route path="/dashboardcontents" element={<DashboardContents />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          {/* </ClientContextProvider> */}
         </BrowserRouter>
       </PageWrapper>
     </ThemeConfig>

@@ -1,59 +1,16 @@
 import styled from "@emotion/styled";
-import { Avatar, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 import CardDetails from "./CardDetails";
+import Header from "./Header";
 
-const staticData = [
-  {
-    title: "Unresolved",
-    count: 60,
-  },
-  {
-    title: "Overdue",
-    count: 16,
-  },
-  {
-    title: "Open",
-    count: 43,
-  },
-  {
-    title: "Onhold",
-    count: 64,
-  },
-];
-
-function DashboardContents(props) {
+function DashboardContents({ users }) {
   return (
     <>
-      <Box
-        style={{
-          padding: "36px 32px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <Box flex={"1"}>
-          <StyledTypography variant="h5">Overview</StyledTypography>
-        </Box>
-
-        <Box
-          flex={"1"}
-          style={{
-            display: "flex",
-            alignItems: "center",
-
-            justifyContent: "flex-end",
-          }}
-        >
-          <Typography variant="subtitle2" style={{ paddingRight: "14px" }}>
-            Jones Ferdinand
-          </Typography>
-          <Avatar>JF</Avatar>
-        </Box>
-      </Box>
-
+      <Header
+        headerleft={<StyledTypography variant="h5">Overview</StyledTypography>}
+      />
       <Box
         style={{
           padding: "58px 30px",
@@ -61,9 +18,7 @@ function DashboardContents(props) {
           justifyContent: "space-evenly",
         }}
       >
-        {staticData.map((item, idx) => {
-          return <CardDetails key={idx} data={item} />;
-        })}
+        <CardDetails data={users} />
       </Box>
     </>
   );

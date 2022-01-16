@@ -1,116 +1,184 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
 import CreateUserDialog from "./CreateUsersDialog";
 
 import { Box } from "@mui/system";
+import PrimaryButton from "./PrimaryButton";
+import Header from "./Header";
+import {
+  Avatar,
+  CardHeader,
+  Chip,
+  Dialog,
+  DialogContent,
+  IconButton,
+  TextField,
+  Typography,
+} from "@mui/material";
+import styled from "@emotion/styled";
+// import { useQuery } from "react-fetching-library";
+// import { getUsersAction } from "../services/UserService";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import moment from "moment";
 
-const rows = [
-  {
-    id: 1,
-    username: "John",
-    age: 25,
-    designation: "Software Engineer",
-    actions: "",
-  },
-  {
-    id: 2,
-    username: "Stephen",
-    age: 32,
-    designation: "Senior Software Engineer",
-    actions: "",
-  },
-  {
-    id: 3,
-    username: "Robert",
-    age: 45,
-    designation: "Team Leader",
-    actions: "",
-  },
-];
+const StyledTable = styled(DataGrid)`
+  .MuiDataGrid-columnHeaderTitle {
+    color: #9fa2b4;
+  }
+  .MuiDataGrid-cell--textLeft {
+    color: #252733;
+    font-size: 16px;
+  }
+  .MuiChip-label {
+    color: #ffffff;
+  }
+`;
 
-function UsersList(props) {
+function UsersList({ users }) {
   const [editOpen, setEditOpen] = useState(false);
-  const [tableData, setTableData] = useState(rows);
   const [currentEditableId, setCurrentEditableId] = useState(null);
+  // const { payload: userData, loading } = useQuery(getUsersAction);
+  // console.log(userData);
 
   const columns = [
     {
-      field: "id",
-      headerName: "ID",
-      width: 70,
+      field: "name",
+      headerName: "Name",
+      flex: 2,
+      align: "start",
       editable: false,
-    },
-    { field: "username", headerName: "username", width: 300, editable: true },
-    {
-      field: "age",
-      headerName: "Age",
-      width: 100,
-      editable: true,
-      type: "number",
+      renderCell: (param) => {
+        return (
+          <Box display={"flex"} alignItems={"center"}>
+            <Avatar
+              src={`https://i.pravatar.cc/150?img=${param.row.id}`}
+            ></Avatar>
+            <Typography style={{ paddingLeft: "24px" }}>
+              {param.row.name}
+            </Typography>
+          </Box>
+          // <CardHeader
+          //   avatar={<Avatar>{param.row.name[0]} </Avatar>}
+          //   title={
+          //     <Typography variant="subtitle2">{param.row.name}</Typography>
+          //   }
+          // />
+        );
+      },
     },
     {
       field: "designation",
       headerName: "Designation",
-      width: 300,
-      editable: true,
+      flex: 1,
+      align: "start",
+      editable: false,
+    },
+    {
+      field: "city",
+      headerName: "City",
+      flex: 1,
+      align: "start",
+      editable: false,
+    },
+    {
+      field: "status",
+      headerName: "status",
+      flex: 1,
+      align: "start",
+      editable: false,
+      renderCell: (param) => {
+        return param.row.status ? (
+          <Chip label="Active" color="success" />
+        ) : (
+          <Chip label="Inactive" color="error" />
+        );
+      },
+    },
+    {
+      field: "createdAt",
+      headerName: "Creation Date",
+      flex: 1,
+      align: "start",
+      editable: false,
+      renderCell: (param) => {
+        const formattedDate = moment(param.row.createdAt).format("DD MMM YYYY");
+
+        return <>{formattedDate}</>;
+      },
     },
     {
       field: "actions",
       headerName: "Actions",
-      width: 300,
+      flex: 1,
+      align: "start",
       renderCell: (param) => {
         return (
           <Box display={"flex"} alignItems={"center"}>
-            <Button
+            <IconButton
+              aria-label="delete"
               onClick={() => {
-                const filtered = tableData.filter(
-                  (item) => item.id !== param.row.id
-                );
-                setTableData(filtered);
+                // const filtered = tableData.filter(
+                //   (item) => item.id !== param.row.id
+                // );
+                // setTableData(filtered);
               }}
             >
-              Delete
-            </Button>
-            <Button onClick={() => setEditOpen(!editOpen)}>Edit</Button>
+              <DeleteIcon fontSize="inherit" color="error" />
+            </IconButton>
+
+            <IconButton
+              onClick={() => {
+                setEditOpen(true);
+                editUserDetails(param);
+              }}
+            >
+              <EditIcon color="primary" />
+            </IconButton>
           </Box>
         );
       },
     },
   ];
 
-  const createUserHandler = (values) => {
-    const updatedRows = [...tableData, values];
-    setTableData(updatedRows);
-  };
+  // const createUserHandler = (values) => {
+  //   const updatedRows = [...tableData, values];
+  //   setTableData(updatedRows);
+  // };
 
-  const editUserDetails = () => {};
+  const editUserDetails = (event) => {
+    console.log(event.row);
+    setCurrentEditableId(event.row.id);
+  };
 
   return (
     <>
-      <div
-        style={{ margin: "24px 0", display: "flex", justifyContent: "center" }}
-      >
-        <Box m={4} style={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button variant="outlined" onClick={() => setEditOpen(true)}>
-            Add user
-          </Button>
-        </Box>
+      <Header
+        headerleft={
+          <Box style={{ width: "180px" }}>
+            <PrimaryButton onClick={() => setEditOpen(true)} label="Add user" />
+          </Box>
+        }
+      />
 
-        <CreateUserDialog
-          isEdit={currentEditableId}
-          createUser={createUserHandler}
-          editUser={editUserDetails}
-          open={editOpen}
-          handleClose={() => setEditOpen(!editOpen)}
-        />
-      </div>
-      <div style={{ height: 300, margin: "24px 24px" }}>
-        <DataGrid
-          rows={tableData}
+      <CreateUserDialog
+        isEdit={currentEditableId}
+        // createUser={createUserHandler}
+        editUser={editUserDetails}
+        open={editOpen}
+        handleClose={() => setEditOpen(false)}
+      />
+
+      <div style={{ padding: "24px 32px" }}>
+        <StyledTable
+          rows={users}
           columns={columns}
-          pageSize={8}
-          rowsPerPageOptions={[8]}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+          autoHeight
+          headerHeight={46}
+          rowHeight={92}
         />
       </div>
     </>

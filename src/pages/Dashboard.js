@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import {
   Drawer,
@@ -15,6 +15,8 @@ import { ReactComponent as LogoIcon } from "../assets/images/logo.svg";
 import { useNavigate } from "react-router-dom";
 import DashboardContents from "../components/DashboardContents";
 import GroupIcon from "@mui/icons-material/Group";
+import UsersList from "../components/UsersList";
+import CircularLoader from "../components/CircularLoader";
 
 const BackgroundWrapper = styled("div")`
   display: flex;
@@ -22,7 +24,7 @@ const BackgroundWrapper = styled("div")`
 `;
 
 const StyledDrawer = styled(Drawer)`
-  width: 255px;
+  width: 300px;
   .MuiDrawer-paper {
     background-color: #363740;
     width: inherit;
@@ -61,13 +63,25 @@ const StyledListItem = styled(ListItem)`
 
 const Dashboard = (props) => {
   const [title, setTitle] = useState(["Overview", "Users"]);
+  const [usersData, setUsersData] = useState(null);
 
   const [currentList, setCurrentList] = useState(0);
   const navigate = useNavigate();
   const handleCurrentList = (event, index) => {
-    console.log(event, index);
+    //console.log(event, index);
     setCurrentList(index);
   };
+
+  useEffect(() => {
+    async function getUsers() {
+      const response = await fetch(
+        "https://61e304c1fbee6800175eaf47.mockapi.io/api/users"
+      );
+      const fetchedUsersData = await response.json();
+      setUsersData(fetchedUsersData);
+    }
+    getUsers();
+  }, []);
 
   return (
     <BackgroundWrapper>
@@ -120,9 +134,17 @@ const Dashboard = (props) => {
           ))}
         </List>
       </StyledDrawer>
-      <Box flex={1}>
-        <DashboardContents />
-      </Box>
+      {usersData === null ? (
+        <CircularLoader />
+      ) : currentList === 0 ? (
+        <Box flex={1}>
+          <DashboardContents users={usersData} />
+        </Box>
+      ) : (
+        <Box flex={1}>
+          <UsersList users={usersData} />
+        </Box>
+      )}
     </BackgroundWrapper>
   );
 };

@@ -1,10 +1,13 @@
 import { Box, alpha } from "@mui/system";
-import React from "react";
+import React, { useContext } from "react";
 import styled from "@emotion/styled";
 import { ReactComponent as LogoIcon } from "../assets/images/logo.svg";
 import { Button, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import PrimaryButton from "../components/PrimaryButton";
+import { UserContext } from "../provider/UserProvider";
+import { useNavigate } from "react-router-dom";
+import CustomInput from "../components/CustomInput";
 
 const BackgroundWrapper = styled("main")`
   display: flex;
@@ -30,6 +33,11 @@ const LoginCard = styled(Box)`
 
 const StyledTextField = styled(TextField)`
   background-color: #fcfdfe;
+
+  /* .MuiOutlinedInput-root {
+    padding: 11px 8px;
+  } */
+
   label {
     color: ${alpha("#4b506d", 0.4)};
   }
@@ -58,6 +66,10 @@ const validate = (values) => {
 };
 
 const Login = () => {
+  const { setUser } = useContext(UserContext);
+
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -65,7 +77,9 @@ const Login = () => {
     },
     validate,
     onSubmit: (values) => {
-      console.log(values);
+      localStorage.setItem("loggedInUser", values);
+      setUser(values);
+      navigate("/dashboard");
     },
   });
 
@@ -99,47 +113,22 @@ const Login = () => {
         <Box height={"48px"} />
         <Box width={"100%"}>
           <form onSubmit={formik.handleSubmit}>
-            <Box>
-              <StyledTextField
-                id="email"
-                label="Email"
-                name="email"
-                type="email"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.email}
-                fullWidth
-                helperText={
-                  formik.errors.email && formik.touched.email ? (
-                    <span style={{ color: "#ff0000" }}>
-                      {formik.errors.email}
-                    </span>
-                  ) : null
-                }
-              />
-            </Box>
+            <CustomInput
+              id="email"
+              label="Email"
+              name="email"
+              type="email"
+              formik={formik}
+            />
             <Box height={"24px"} />
-            <Box>
-              <StyledTextField
-                id="password"
-                name="password"
-                label="Password"
-                type="password"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.password}
-                fullWidth
-                helperText={
-                  formik.errors.password && formik.touched.password ? (
-                    <span style={{ color: "#ff0000" }}>
-                      {formik.errors.password}
-                    </span>
-                  ) : null
-                }
-              />
-            </Box>
+            <CustomInput
+              id="password"
+              name="password"
+              label="Password"
+              type="password"
+              formik={formik}
+            />
             <Box height={"24px"} />
-
             <PrimaryButton label="Log In" isDisabled={!formik.isValid} />
           </form>
         </Box>

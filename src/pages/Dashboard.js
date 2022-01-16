@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import {
   Drawer,
@@ -17,6 +17,7 @@ import DashboardContents from "../components/DashboardContents";
 import GroupIcon from "@mui/icons-material/Group";
 import UsersList from "../components/UsersList";
 import CircularLoader from "../components/CircularLoader";
+import { UserService } from "../services/UserService";
 
 const BackgroundWrapper = styled("div")`
   display: flex;
@@ -67,21 +68,22 @@ const Dashboard = (props) => {
 
   const [currentList, setCurrentList] = useState(0);
   const navigate = useNavigate();
+
   const handleCurrentList = (event, index) => {
     //console.log(event, index);
     setCurrentList(index);
   };
 
-  useEffect(() => {
-    async function getUsers() {
-      const response = await fetch(
-        "https://61e304c1fbee6800175eaf47.mockapi.io/api/users"
-      );
-      const fetchedUsersData = await response.json();
-      setUsersData(fetchedUsersData);
+  const getUsers = useCallback(async () => {
+    const response = await UserService.getUsers();
+    if (response) {
+      setUsersData(response);
     }
+  }, [setUsersData]);
+
+  useEffect(() => {
     getUsers();
-  }, []);
+  }, [getUsers]);
 
   return (
     <BackgroundWrapper>
@@ -142,7 +144,7 @@ const Dashboard = (props) => {
         </Box>
       ) : (
         <Box flex={1}>
-          <UsersList users={usersData} />
+          <UsersList users={usersData} getUsers={getUsers} />
         </Box>
       )}
     </BackgroundWrapper>

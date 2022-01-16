@@ -1,8 +1,6 @@
 import { ThemeProvider } from "@emotion/react";
 import { createTheme, CssBaseline } from "@mui/material";
-import React, { useState } from "react";
-
-export const ThemeContext = React.createContext({});
+import React from "react";
 
 export default function ThemeConfig({ children }) {
   const theme = createTheme({
@@ -26,7 +24,7 @@ export default function ThemeConfig({ children }) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <ThemeContext.Provider>{children}</ThemeContext.Provider>
+      {children}
     </ThemeProvider>
   );
 }

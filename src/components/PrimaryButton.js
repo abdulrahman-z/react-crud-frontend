@@ -14,13 +14,14 @@ const StyledSubmitButton = styled(Button)`
   text-transform: capitalize;
 `;
 
-function PrimaryButton({ label, isDisabled }) {
+function PrimaryButton({ label, isDisabled, ...rest }) {
   return (
     <StyledSubmitButton
       fullWidth
       variant="contained"
       type="submit"
       disabled={isDisabled}
+      {...rest}
     >
       {label}
     </StyledSubmitButton>

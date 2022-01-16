@@ -1,10 +1,14 @@
 import styled from "@emotion/styled";
-import { Avatar, Box, Button, Typography } from "@mui/material";
-import React from "react";
+import { Avatar, Box, Button, IconButton, Typography } from "@mui/material";
+import React, { useContext } from "react";
 import UserImage from "./../assets/images/avatar.png";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { UserContext } from "../provider/UserProvider";
+import { useNavigate } from "react-router-dom";
 
 function Header({ headerleft }) {
+  const { setUser } = useContext(UserContext);
+  const navigate = useNavigate();
   return (
     <Box
       style={{
@@ -30,9 +34,16 @@ function Header({ headerleft }) {
         </Typography>
         <Avatar src={UserImage} />
         <Box>
-          <Button>
+          <IconButton
+            style={{ marginLeft: "24px" }}
+            onClick={() => {
+              setUser(null);
+              localStorage.removeItem("loggedInUser");
+              navigate("/");
+            }}
+          >
             <LogoutIcon />
-          </Button>
+          </IconButton>
         </Box>
       </Box>
     </Box>

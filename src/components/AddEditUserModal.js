@@ -1,5 +1,15 @@
 import styled from "@emotion/styled";
-import { Box, Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import { useFormik } from "formik";
 import React, { useEffect } from "react";
 import CustomInput from "./CustomInput";
@@ -70,12 +80,27 @@ function AddEditUserModal({
           />
 
           <Box height={"24px"} />
-          <CustomInput
+          {/* <CustomInput
             id="status"
             name="status"
             label="status"
             formik={formik}
-          />
+          /> */}
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Status</InputLabel>
+            <Select
+              id="status"
+              labelId="demo-simple-select-label"
+              name="status"
+              label="status"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.status}
+            >
+              <MenuItem value={true}>Active</MenuItem>
+              <MenuItem value={false}>Inactive</MenuItem>
+            </Select>
+          </FormControl>
           <Box height={"24px"} />
           <Box style={{ display: "flex", justifyContent: "flex-end" }}>
             <Button color="error" onClick={handleClose}>

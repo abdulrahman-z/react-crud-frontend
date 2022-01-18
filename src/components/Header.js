@@ -7,7 +7,8 @@ import { UserContext } from "../provider/UserProvider";
 import { useNavigate } from "react-router-dom";
 
 function Header({ headerleft }) {
-  const { setUser } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
+  console.log(user);
   const navigate = useNavigate();
   return (
     <Box
@@ -30,7 +31,7 @@ function Header({ headerleft }) {
         }}
       >
         <Typography variant="subtitle2" style={{ paddingRight: "14px" }}>
-          Jones Ferdinand
+          {user.email}
         </Typography>
         <Avatar src={UserImage} />
         <Box>

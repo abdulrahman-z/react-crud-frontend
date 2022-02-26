@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 function Header({ headerleft }) {
   const { user, setUser } = useContext(UserContext);
-  console.log(user);
+  //console.log(user);
   const navigate = useNavigate();
   return (
     <Box
@@ -38,8 +38,8 @@ function Header({ headerleft }) {
           <IconButton
             style={{ marginLeft: "24px" }}
             onClick={() => {
-              setUser(null);
               localStorage.removeItem("loggedInUser");
+              setUser(null);
               navigate("/");
             }}
           >

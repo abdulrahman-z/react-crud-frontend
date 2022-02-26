@@ -1,6 +1,5 @@
 import { Box, Typography } from "@mui/material";
 import moment from "moment";
-import react from "react";
 
 function CardDetails({ data }) {
   const cardTitle = [

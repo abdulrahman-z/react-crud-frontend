@@ -77,8 +77,9 @@ const Login = () => {
     },
     validate,
     onSubmit: (values) => {
-      localStorage.setItem("loggedInUser", values);
+      console.log(values);
       setUser(values);
+      localStorage.setItem("loggedInUser", values);
       navigate("/dashboard");
     },
   });
